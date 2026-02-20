@@ -17,14 +17,10 @@ import {
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { Alert, AlertTitle } from "@/components/ui/alert";
-import { AlertCircleIcon } from "lucide-react";
+import { AlertCircleIcon, Fullscreen } from "lucide-react";
 
 import { useActionState } from "react";
-import { AuthState, signUp } from "@/app/(auth)/login/actions";
-
-const initialState: AuthState = {
-  error: null,
-};
+import { signUp } from "@/app/actions/auth";
 
 import Link from "next/link";
 
@@ -32,7 +28,7 @@ export function SignupForm({
   className,
   ...props
 }: React.ComponentProps<"div">) {
-  const [state, action, isPending] = useActionState(signUp, initialState);
+  const [state, action, isPending] = useActionState(signUp, undefined);
 
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>
@@ -45,26 +41,33 @@ export function SignupForm({
         </CardHeader>
         <CardContent>
           <form action={action}>
-            <FieldGroup>
-              {/* Display Errors */}
-              {state?.error && (
-                <Alert
-                  variant="destructive"
-                  className="mb-4 flex items-center gap-3 px-4 py-3"
-                >
-                  <div>
-                    <AlertCircleIcon className="h-4 w-4" />
-                  </div>
-                  <AlertTitle className="mb-0 mt-0 text-sm font-medium leading-none">
-                    {state.error}
-                  </AlertTitle>
-                </Alert>
-              )}
-            </FieldGroup>
+            {/* Display Errors */}
+            {state?.message && (
+              <Alert
+                variant="destructive"
+                className="mb-4 flex items-center gap-3 px-4 py-3"
+              >
+                <div>
+                  <AlertCircleIcon className="h-4 w-4" />
+                </div>
+                <AlertTitle className="mb-0 mt-0 text-sm font-medium leading-none">
+                  {state.message}
+                </AlertTitle>
+              </Alert>
+            )}
             <FieldGroup>
               <Field>
                 <FieldLabel htmlFor="name">Username</FieldLabel>
-                <Input id="name" type="text" placeholder="jDoe" required />
+                <Input
+                  id="name"
+                  name="name"
+                  type="text"
+                  placeholder="jDoe"
+                  required
+                />
+                {state?.errors?.name && (
+                  <p className="text-red-500">{state.errors.name}</p>
+                )}
               </Field>
               <Field>
                 <FieldLabel htmlFor="email">Email</FieldLabel>
@@ -76,8 +79,9 @@ export function SignupForm({
                   required
                 />
               </Field>
+              {state?.errors?.email && <p>{state.errors.email}</p>}
               <Field>
-                <Field className="grid grid-cols-2 gap-4">
+                <Field className="grid  gap-1">
                   <Field>
                     <FieldLabel htmlFor="password">Password</FieldLabel>
                     <Input
@@ -87,21 +91,21 @@ export function SignupForm({
                       required
                     />
                   </Field>
-                  <Field>
-                    <FieldLabel htmlFor="confirm-password">
-                      Confirm Password
-                    </FieldLabel>
-                    <Input
-                      id="confirm-password"
-                      name="password"
-                      type="password"
-                      required
-                    />
-                  </Field>
                 </Field>
-                <FieldDescription>
-                  Must be at least 8 characters long.
-                </FieldDescription>
+                {state?.errors?.password ? (
+                  <div className="text-red-500">
+                    <p>Password must:</p>
+                    <ul>
+                      {state.errors.password.map((error) => (
+                        <li key={error}>- {error}</li>
+                      ))}
+                    </ul>
+                  </div>
+                ) : (
+                  <FieldDescription>
+                    Must be at least 8 characters long.
+                  </FieldDescription>
+                )}
               </Field>
               <Field>
                 <Button type="submit">Create Account</Button>
@@ -113,7 +117,7 @@ export function SignupForm({
           </form>
         </CardContent>
       </Card>
-      <FieldDescription className="px-6 text-center">
+      <FieldDescription className="px-3 text-center">
         By clicking continue, you agree to our <a href="#">Terms of Service</a>{" "}
         and <a href="#">Privacy Policy</a>.
       </FieldDescription>

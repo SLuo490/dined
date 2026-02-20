@@ -20,19 +20,15 @@ import { Input } from "@/components/ui/input";
 import { Alert, AlertTitle } from "@/components/ui/alert";
 import { AlertCircleIcon } from "lucide-react";
 
+import { signIn } from "@/app/actions/auth";
 import Link from "next/link";
-import { signIn, type AuthState } from "@/app/(auth)/login/actions";
 import { useActionState } from "react";
-
-const initialState: AuthState = {
-  error: null,
-};
 
 export function LoginForm({
   className,
   ...props
 }: React.ComponentProps<"div">) {
-  const [state, action, isPending] = useActionState(signIn, initialState);
+  const [state, action, isPending] = useActionState(signIn, undefined);
 
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>
@@ -45,7 +41,7 @@ export function LoginForm({
         </CardHeader>
 
         <CardContent>
-          <form action={action}>
+          <form action={signIn}>
             <FieldGroup>
               {state?.error && (
                 <Alert
