@@ -7,17 +7,20 @@ import { redirect } from "next/navigation";
 export async function signUp(state: FormState, formData: FormData) {
   const supabase = await createClient();
 
+  const inputs = {
+    name: formData.get("name")?.toString() || "",
+    email: formData.get("email")?.toString() || "",
+    password: formData.get("password")?.toString() || "",
+  };
+
   // Validate form fields
-  const validatedFields = SignupFormSchema.safeParse({
-    name: formData.get("name"),
-    email: formData.get("email"),
-    password: formData.get("password"),
-  });
+  const validatedFields = SignupFormSchema.safeParse(inputs);
 
   // If any form fields are invalid, return early
   if (!validatedFields.success) {
     return {
       errors: validatedFields.error.flatten().fieldErrors,
+      inputs,
     };
   }
 
@@ -36,10 +39,11 @@ export async function signUp(state: FormState, formData: FormData) {
   if (error) {
     return {
       message: error.message,
+      inputs,
     };
   }
 
-  redirect("/check-email");
+  redirect("/confirm-email");
 }
 
 export async function signIn() {}

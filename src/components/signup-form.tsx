@@ -17,7 +17,7 @@ import {
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { Alert, AlertTitle } from "@/components/ui/alert";
-import { AlertCircleIcon, Fullscreen } from "lucide-react";
+import { AlertCircleIcon } from "lucide-react";
 
 import { useActionState } from "react";
 import { signUp } from "@/app/actions/auth";
@@ -63,6 +63,7 @@ export function SignupForm({
                   name="name"
                   type="text"
                   placeholder="jDoe"
+                  defaultValue={state?.inputs?.name}
                   required
                 />
                 {state?.errors?.name && (
@@ -76,6 +77,7 @@ export function SignupForm({
                   name="email"
                   type="email"
                   placeholder="m@example.com"
+                  defaultValue={state?.inputs?.email}
                   required
                 />
               </Field>
@@ -88,6 +90,7 @@ export function SignupForm({
                       id="password"
                       name="password"
                       type="password"
+                      defaultValue={state?.inputs?.password}
                       required
                     />
                   </Field>
