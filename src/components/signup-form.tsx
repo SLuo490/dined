@@ -1,3 +1,5 @@
+"use client";
+
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import {
@@ -14,7 +16,15 @@ import {
   FieldLabel,
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
-import { signUp } from "@/app/(auth)/login/actions";
+import { Alert, AlertTitle } from "@/components/ui/alert";
+import { AlertCircleIcon } from "lucide-react";
+
+import { useActionState } from "react";
+import { AuthState, signUp } from "@/app/(auth)/login/actions";
+
+const initialState: AuthState = {
+  error: null,
+};
 
 import Link from "next/link";
 
@@ -22,6 +32,8 @@ export function SignupForm({
   className,
   ...props
 }: React.ComponentProps<"div">) {
+  const [state, action, isPending] = useActionState(signUp, initialState);
+
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>
       <Card>
@@ -32,7 +44,23 @@ export function SignupForm({
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <form>
+          <form action={action}>
+            <FieldGroup>
+              {/* Display Errors */}
+              {state?.error && (
+                <Alert
+                  variant="destructive"
+                  className="mb-4 flex items-center gap-3 px-4 py-3"
+                >
+                  <div>
+                    <AlertCircleIcon className="h-4 w-4" />
+                  </div>
+                  <AlertTitle className="mb-0 mt-0 text-sm font-medium leading-none">
+                    {state.error}
+                  </AlertTitle>
+                </Alert>
+              )}
+            </FieldGroup>
             <FieldGroup>
               <Field>
                 <FieldLabel htmlFor="name">Username</FieldLabel>

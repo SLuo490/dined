@@ -29,7 +29,7 @@ export async function signIn(prevState: AuthState, formData: FormData) {
   redirect("/");
 }
 
-export async function signUp(formData: FormData) {
+export async function signUp(prevState: AuthState, formData: FormData) {
   const supabase = await createClient();
 
   // type-casting here for convenience
@@ -46,5 +46,5 @@ export async function signUp(formData: FormData) {
   }
 
   revalidatePath("/", "layout");
-  redirect("/");
+  redirect("/confirm-email");
 }
