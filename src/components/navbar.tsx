@@ -2,9 +2,10 @@
 
 import Link from "next/link";
 import { useState } from "react";
-import { Utensils, Search, Menu, X } from "lucide-react";
+import { Search, Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Logo } from "@/components/logo";
 
 export function Navbar() {
   const [open, setOpen] = useState(false);
@@ -13,18 +14,10 @@ export function Navbar() {
     <header className="sticky top-0 z-50 border-b bg-background">
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between gap-4 px-6">
         {/* Logo */}
-        <Link
-          href="/"
-          className="flex items-center gap-2 font-semibold text-lg"
-        >
-          <div className="bg-primary text-primary-foreground flex size-7 items-center justify-center rounded-md">
-            <Utensils className="size-4" strokeWidth={2} />
-          </div>
-          dineD
-        </Link>
+        <Logo />
 
         {/* Desktop nav links */}
-        <nav className="hidden md:flex items-center gap-6 text-sm">
+        <nav className="hidden md:flex gap-10 text-sm font-semibold">
           <Link
             href="/"
             className="text-foreground/80 hover:text-foreground transition-colors"
@@ -46,7 +39,7 @@ export function Navbar() {
         </nav>
 
         {/* Search bar */}
-        <div className="hidden md:flex relative w-56">
+        <div className="hidden md:flex relative w-72">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground pointer-events-none" />
           <Input placeholder="Search..." className="pl-9" />
         </div>
