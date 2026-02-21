@@ -1,19 +1,12 @@
 import Link from "next/link";
 import { Utensils, CircleCheck } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Separator } from "@/components/ui/separator";
 
 const features = [
   "Track Every Meal",
   "Rate & Review",
   "Build Lists",
   "Share Discoveries",
-];
-
-const stats = [
-  { value: "50K+", label: "Active Users" },
-  { value: "2M+", label: "Meals Logged" },
-  { value: "100K+", label: "Restaurants" },
 ];
 
 export default function Home() {
@@ -40,32 +33,15 @@ export default function Home() {
           </p>
         </div>
 
-        {/* Stats */}
-        <div className="flex w-full items-center justify-center rounded-xl border bg-card px-8 py-6 shadow-xs">
-          {stats.map((stat, i) => (
-            <div key={stat.label} className="contents">
-              <div className="flex flex-1 flex-col items-center gap-1">
-                <span className="text-4xl font-bold">{stat.value}</span>
-                <span className="text-muted-foreground text-sm">
-                  {stat.label}
-                </span>
-              </div>
-              {i < stats.length - 1 && (
-                <Separator orientation="vertical" className="h-10" />
-              )}
-            </div>
-          ))}
-        </div>
-
         {/* CTA buttons */}
         <div className="flex w-full flex-col gap-3 sm:flex-row">
           <Button asChild className="flex-1 h-12">
-            <Link className="py-2" href="/signup">
+            <Link className="py-3 md:py-0" href="/signup">
               Get Started
             </Link>
           </Button>
           <Button asChild variant="outline" className="flex-1 h-12">
-            <Link className="py-2" href="/login">
+            <Link className="py-3 md:py-0" href="/login">
               Sign In
             </Link>
           </Button>
@@ -87,7 +63,7 @@ export default function Home() {
 
       {/* Footer */}
       <div className="absolute bottom-6 flex flex-wrap items-center justify-center gap-x-5 gap-y-1">
-        {["About", "Features", "Privacy", "Terms", "Contact"].map((item) => (
+        {["About", "Privacy", "Terms", "Contact"].map((item) => (
           <Link
             key={item}
             href="#"
