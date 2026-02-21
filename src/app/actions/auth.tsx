@@ -1,6 +1,11 @@
 "use server";
 
-import { SignupFormSchema, FormState, LoginFormSchema, LoginFormState } from "@/lib/definitions";
+import {
+  SignupFormSchema,
+  FormState,
+  LoginFormSchema,
+  LoginFormState,
+} from "@/lib/definitions";
 import { createClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
 
@@ -59,7 +64,8 @@ export async function signIn(state: LoginFormState, formData: FormData) {
   if (!validatedFields.success) {
     const fieldErrors = validatedFields.error.flatten().fieldErrors;
     return {
-      error: fieldErrors.email?.[0] ?? fieldErrors.password?.[0] ?? "Invalid input.",
+      error:
+        fieldErrors.email?.[0] ?? fieldErrors.password?.[0] ?? "Invalid input.",
       inputs,
     };
   }
