@@ -41,7 +41,7 @@ export function LoginForm({
         </CardHeader>
 
         <CardContent>
-          <form action={signIn}>
+          <form action={action}>
             <FieldGroup>
               {state?.error && (
                 <Alert
@@ -67,6 +67,7 @@ export function LoginForm({
                   name="email"
                   type="email"
                   placeholder="m@example.com"
+                  defaultValue={state?.inputs?.email}
                   required
                 />
               </Field>
