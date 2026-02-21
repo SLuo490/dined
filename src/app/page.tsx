@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Utensils, CircleCheck } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Navbar } from "@/components/navbar";
 
 const features = [
   "Track Every Meal",
@@ -11,7 +12,9 @@ const features = [
 
 export default function Home() {
   return (
-    <div className="bg-muted relative flex min-h-svh flex-col items-center justify-center gap-8 p-6 pb-16 md:p-10 md:pb-16">
+    <div className="bg-muted flex min-h-svh flex-col">
+      <Navbar />
+      <main className="relative flex flex-1 flex-col items-center justify-center gap-8 p-6 pb-16 md:p-10 md:pb-16">
       {/* Brand mark */}
       <div className="flex items-center gap-2 font-bold">
         <div className="bg-primary text-primary-foreground flex size-8 items-center justify-center rounded-md">
@@ -73,6 +76,7 @@ export default function Home() {
           </Link>
         ))}
       </div>
+      </main>
     </div>
   );
 }
