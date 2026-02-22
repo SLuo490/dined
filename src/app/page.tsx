@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Utensils, CircleCheck } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Navbar } from "@/components/navbar";
 import {
   Carousel,
   CarouselContent,
@@ -78,11 +79,10 @@ const restaurants = [
 export default function Home() {
   return (
     <div className="bg-muted flex min-h-svh flex-col">
+      <Navbar />
       <main className="relative flex flex-1 flex-col items-center gap-4 pb-16 px-16 md:p-10 md:pb-16">
         {/* Hero — vertically centered in available space */}
         <div className="flex flex-1 w-full flex-col items-center justify-center gap-8">
-          {/* Brand mark */}
-
           {/* Center hero */}
           <div className="flex w-full max-w-2xl flex-col items-center gap-8 text-center pb-10">
             <div className="flex flex-col gap-4">
