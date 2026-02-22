@@ -31,9 +31,11 @@ src/
 │   ├── layout.tsx
 │   └── page.tsx
 ├── components/
-│   ├── login-form.tsx    # Client component using useActionState
-│   ├── signup-form.tsx   # Client component using useActionState
-│   └── ui/              # shadcn/ui components (button, card, input, field, label, alert, separator)
+│   ├── login-form.tsx       # Client component using useActionState
+│   ├── signup-form.tsx      # Client component using useActionState
+│   ├── navbar.tsx           # Sticky top navbar used on the landing page
+│   ├── restaurant-card.tsx  # Restaurant card with star rating, price range, and accessibility icon
+│   └── ui/                  # shadcn/ui components (button, card, input, field, label, alert, separator, carousel)
 ├── lib/
 │   ├── definitions.ts   # Zod schemas and TypeScript types
 │   ├── utils.ts         # cn() helper (clsx + tailwind-merge)
@@ -65,3 +67,5 @@ proxy.ts                 # Next.js middleware: refreshes Supabase session on eve
 ### Current state
 
 The `signIn` server action in `app/actions/auth.tsx` is an empty stub — password login is not yet implemented.
+
+The landing page (`app/page.tsx`) includes a "Popular Restaurants" carousel section below the hero using shadcn's `Carousel` component with mock data. `RestaurantCard` renders a placeholder image, half-star-capable `StarRating`, price range, cuisine type, and optional accessibility icon.
