@@ -10,6 +10,7 @@ import {
   CarouselPrevious,
 } from "@/components/ui/carousel";
 import { RestaurantCard } from "@/components/restaurant-card";
+import { Logo } from "@/components/logo";
 
 const features = [
   "Track Every Meal",
@@ -83,6 +84,8 @@ export default function Home() {
       <main className="relative flex flex-1 flex-col items-center gap-4 pb-16 px-16 md:p-10 md:pb-16">
         {/* Hero — vertically centered in available space */}
         <div className="flex flex-1 w-full flex-col items-center justify-center gap-8">
+          {/* <Logo /> */}
+
           {/* Center hero */}
           <div className="flex w-full max-w-2xl flex-col items-center gap-8 text-center pb-10">
             <div className="flex flex-col gap-4">
@@ -133,14 +136,16 @@ export default function Home() {
                     key={r.id}
                     className="pl-4 sm:basis-1/2 md:basis-1/3 lg:basis-1/4"
                   >
-                    <RestaurantCard
-                      name={r.name}
-                      rating={r.rating}
-                      reviewCount={r.reviewCount}
-                      priceRange={r.priceRange}
-                      type={r.type}
-                      accessible={r.accessible}
-                    />
+                    <Link href={`/restaurants/${r.id}`}>
+                      <RestaurantCard
+                        name={r.name}
+                        rating={r.rating}
+                        reviewCount={r.reviewCount}
+                        priceRange={r.priceRange}
+                        type={r.type}
+                        accessible={r.accessible}
+                      />
+                    </Link>
                   </CarouselItem>
                 ))}
               </CarouselContent>
