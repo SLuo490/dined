@@ -60,7 +60,12 @@ const RESTAURANTS: Restaurant[] = [
     address: "Madison Square Park, New York, NY 10010",
     description:
       "Born from a hot dog cart in Madison Square Park, Shake Shack has grown into a global phenomenon. Famous for its ShackBurger, crinkle-cut fries, and hand-spun frozen custard shakes — quality fast food done right.",
-    images: ["ShackBurger", "Crinkle fries", "Custard shake", "Outdoor seating"],
+    images: [
+      "ShackBurger",
+      "Crinkle fries",
+      "Custard shake",
+      "Outdoor seating",
+    ],
   },
   {
     id: 4,
@@ -99,7 +104,12 @@ const RESTAURANTS: Restaurant[] = [
     address: "181 Thompson St, New York, NY 10012",
     description:
       "An homage to the Italian-American restaurants of mid-20th century New York, Carbone is a theatrical dining experience in Greenwich Village. Tuxedoed waiters serve elevated classics like spicy rigatoni vodka and veal parmesan in a retro-glamorous setting.",
-    images: ["Spicy rigatoni", "Veal parmesan", "Retro dining room", "Desserts"],
+    images: [
+      "Spicy rigatoni",
+      "Veal parmesan",
+      "Retro dining room",
+      "Desserts",
+    ],
   },
 ];
 
@@ -154,12 +164,14 @@ export default async function RestaurantDetailPage({
 
         {/* Info */}
         <div className="flex flex-col gap-3">
-          <h1 className="text-3xl font-bold tracking-tight">{restaurant.name}</h1>
+          <h1 className="text-3xl font-bold tracking-tight">
+            {restaurant.name}
+          </h1>
           <div className="flex items-center gap-2">
             <StarRating rating={restaurant.rating} />
             <span className="text-muted-foreground text-sm">
-              ({restaurant.reviewCount}) &middot; {restaurant.priceRange} &middot;{" "}
-              {restaurant.type}
+              ({restaurant.reviewCount}) &middot; {restaurant.priceRange}{" "}
+              &middot; {restaurant.type}
             </span>
           </div>
           <p className="text-muted-foreground text-sm">{restaurant.address}</p>

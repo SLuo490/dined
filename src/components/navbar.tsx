@@ -18,24 +18,33 @@ export function Navbar() {
 
         {/* Desktop nav links */}
         <nav className="hidden md:flex gap-10 text-sm font-semibold">
-          <Link
-            href="/"
-            className="text-foreground/80 hover:text-foreground transition-colors"
-          >
-            Home
-          </Link>
-          <Link
-            href="/restaurants"
-            className="text-foreground/80 hover:text-foreground transition-colors"
-          >
-            Restaurants
-          </Link>
-          <Link
-            href="/list"
-            className="text-foreground/80 hover:text-foreground transition-colors"
-          >
-            List
-          </Link>
+          <Button variant="ghost">
+            <Link
+              href="/"
+              className="text-foreground/80 hover:text-foreground transition-colors"
+              onClick={() => setOpen(false)}
+            >
+              Home
+            </Link>
+          </Button>
+          <Button variant="ghost">
+            <Link
+              href="/restaurants"
+              className="text-foreground/80 hover:text-foreground transition-colors"
+              onClick={() => setOpen(false)}
+            >
+              Restaurants
+            </Link>
+          </Button>
+          <Button variant="ghost">
+            <Link
+              href="/list"
+              className="text-foreground/80 hover:text-foreground transition-colors"
+              onClick={() => setOpen(false)}
+            >
+              List
+            </Link>
+          </Button>
         </nav>
 
         {/* Search bar */}
@@ -70,27 +79,33 @@ export function Navbar() {
       {open && (
         <div className="md:hidden border-t bg-background px-6 py-4 flex flex-col gap-4">
           <nav className="flex flex-col gap-3 text-sm">
-            <Link
-              href="/"
-              className="text-foreground/80 hover:text-foreground transition-colors"
-              onClick={() => setOpen(false)}
-            >
-              Home
-            </Link>
-            <Link
-              href="/restaurants"
-              className="text-foreground/80 hover:text-foreground transition-colors"
-              onClick={() => setOpen(false)}
-            >
-              Restaurants
-            </Link>
-            <Link
-              href="/list"
-              className="text-foreground/80 hover:text-foreground transition-colors"
-              onClick={() => setOpen(false)}
-            >
-              List
-            </Link>
+            <Button variant="ghost">
+              <Link
+                href="/"
+                className="text-foreground/80 hover:text-foreground transition-colors"
+                onClick={() => setOpen(false)}
+              >
+                Home
+              </Link>
+            </Button>
+            <Button variant="ghost">
+              <Link
+                href="/restaurants"
+                className="text-foreground/80 hover:text-foreground transition-colors"
+                onClick={() => setOpen(false)}
+              >
+                Restaurants
+              </Link>
+            </Button>
+            <Button variant="ghost">
+              <Link
+                href="/list"
+                className="text-foreground/80 hover:text-foreground transition-colors"
+                onClick={() => setOpen(false)}
+              >
+                List
+              </Link>
+            </Button>
           </nav>
           <div className="relative">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground pointer-events-none" />

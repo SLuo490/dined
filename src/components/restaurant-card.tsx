@@ -43,7 +43,7 @@ export function RestaurantCard({
   accessible,
 }: RestaurantCardProps) {
   return (
-    <Card className="overflow-hidden py-0">
+    <Card className="py-0">
       <div className="bg-gray-200 flex h-44 items-center justify-center">
         <UtensilsCrossed className="text-muted-foreground/30 size-12" />
       </div>

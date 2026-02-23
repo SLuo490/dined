@@ -18,6 +18,7 @@ No test runner is configured.
 **Stack**: Next.js 16 (App Router), React 19, TypeScript (strict), Tailwind CSS 4, shadcn/ui, Supabase SSR
 
 **Environment variables** (required in `.env.local`):
+
 - `NEXT_PUBLIC_SUPABASE_URL`
 - `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`
 
@@ -26,12 +27,17 @@ No test runner is configured.
 ```
 src/
 ├── app/
-│   ├── (auth)/          # Auth route group: login, signup, confirm-email, confirm (OTP route)
-│   ├── actions/auth.tsx  # Server actions: signUp, signIn
+│   ├── (auth)/              # Auth route group: login, signup, confirm-email, confirm (OTP route)
+│   ├── actions/auth.tsx     # Server actions: signUp, signIn
+│   ├── dashboard/page.tsx   # Dashboard page
+│   ├── restaurants/         # Restaurants page
+│       ├── [restaurantID]   # Restaurant slug
+│       ├── page.tsx         # Detail page for the restaurantID
 │   ├── layout.tsx
 │   └── page.tsx
 ├── components/
 │   ├── login-form.tsx       # Client component using useActionState
+│   ├── logo.tsx             # Logo component (dined)
 │   ├── signup-form.tsx      # Client component using useActionState
 │   ├── navbar.tsx           # Sticky top navbar used on the landing page
 │   ├── restaurant-card.tsx  # Restaurant card with star rating, price range, and accessibility icon
@@ -54,6 +60,7 @@ proxy.ts                 # Next.js middleware: refreshes Supabase session on eve
 **Validation**: Zod schemas are defined in `lib/definitions.ts` and run server-side inside the server actions before any Supabase call.
 
 **Auth flow**:
+
 1. Signup → Supabase sends verification email → `/confirm-email` placeholder
 2. Email link → `/confirm` route handler verifies OTP → redirects to next URL or dashboard
 3. Middleware (`proxy.ts` at repo root) refreshes Supabase session cookies on every request
