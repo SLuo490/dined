@@ -1,5 +1,7 @@
+"use client";
+
 import Link from "next/link";
-import { Utensils, CircleCheck } from "lucide-react";
+import { CircleCheck } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Navbar } from "@/components/navbar";
 import {
@@ -10,7 +12,8 @@ import {
   CarouselPrevious,
 } from "@/components/ui/carousel";
 import { RestaurantCard } from "@/components/restaurant-card";
-import { Logo } from "@/components/logo";
+import Autoplay from "embla-carousel-autoplay";
+import * as React from "react";
 
 const features = [
   "Track Every Meal",
@@ -78,14 +81,15 @@ const restaurants = [
 ];
 
 export default function Home() {
+  const plugin = React.useRef(
+    Autoplay({ delay: 700, stopOnInteraction: false }),
+  );
   return (
     <div className="bg-muted flex min-h-svh flex-col">
       <Navbar />
       <main className="relative flex flex-1 flex-col items-center gap-4 pb-16 px-16 md:p-10 md:pb-16">
         {/* Hero — vertically centered in available space */}
         <div className="flex flex-1 w-full flex-col items-center justify-center gap-8">
-          {/* <Logo /> */}
-
           {/* Center hero */}
           <div className="flex w-full max-w-2xl flex-col items-center gap-8 text-center pb-10">
             <div className="flex flex-col gap-4">
@@ -129,7 +133,13 @@ export default function Home() {
 
           {/* Restaurant carousel */}
           <div className="w-full max-w-5xl">
-            <Carousel opts={{ align: "start" }} className="w-full">
+            <Carousel
+              plugins={[plugin.current]}
+              opts={{ align: "start", loop: true }}
+              className="w-full"
+              onMouseEnter={plugin.current.stop}
+              onMouseLeave={plugin.current.play}
+            >
               <CarouselContent className="-ml-4">
                 {restaurants.map((r) => (
                   <CarouselItem
