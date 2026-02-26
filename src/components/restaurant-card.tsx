@@ -1,5 +1,6 @@
-import { Star, UtensilsCrossed, Accessibility } from "lucide-react";
+import { UtensilsCrossed, Accessibility } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { StarRating } from "@/components/star-rating";
 
 export interface RestaurantCardProps {
   name: string;
@@ -8,30 +9,6 @@ export interface RestaurantCardProps {
   priceRange: string;
   type: string;
   accessible: boolean;
-}
-
-function StarRating({ rating }: { rating: number }) {
-  return (
-    <div className="flex items-center gap-0.5">
-      {Array.from({ length: 5 }, (_, i) => {
-        const filled = i < Math.floor(rating);
-        const half = !filled && i < rating;
-        return (
-          <span key={i} className="relative size-4">
-            <Star className="size-4 fill-gray-200 text-gray-200" />
-            {(filled || half) && (
-              <span
-                className="absolute inset-0 overflow-hidden"
-                style={{ width: filled ? "100%" : "50%" }}
-              >
-                <Star className="size-4 fill-yellow-400 text-yellow-400" />
-              </span>
-            )}
-          </span>
-        );
-      })}
-    </div>
-  );
 }
 
 export function RestaurantCard({

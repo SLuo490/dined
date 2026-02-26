@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
-import { Star, UtensilsCrossed } from "lucide-react";
+import { UtensilsCrossed } from "lucide-react";
 import { Navbar } from "@/components/navbar";
+import { StarRating } from "@/components/star-rating";
 import {
   Carousel,
   CarouselContent,
@@ -113,30 +114,6 @@ const RESTAURANTS: Restaurant[] = [
   },
 ];
 
-function StarRating({ rating }: { rating: number }) {
-  return (
-    <div className="flex items-center gap-0.5">
-      {Array.from({ length: 5 }, (_, i) => {
-        const filled = i < Math.floor(rating);
-        const half = !filled && i < rating;
-        return (
-          <span key={i} className="relative size-5">
-            <Star className="size-5 fill-gray-200 text-gray-200" />
-            {(filled || half) && (
-              <span
-                className="absolute inset-0 overflow-hidden"
-                style={{ width: filled ? "100%" : "50%" }}
-              >
-                <Star className="size-5 fill-yellow-400 text-yellow-400" />
-              </span>
-            )}
-          </span>
-        );
-      })}
-    </div>
-  );
-}
-
 export default async function RestaurantDetailPage({
   params,
 }: {
@@ -168,7 +145,7 @@ export default async function RestaurantDetailPage({
             {restaurant.name}
           </h1>
           <div className="flex items-center gap-2">
-            <StarRating rating={restaurant.rating} />
+            <StarRating rating={restaurant.rating} size="lg" />
             <span className="text-muted-foreground text-sm">
               ({restaurant.reviewCount}) &middot; {restaurant.priceRange}{" "}
               &middot; {restaurant.type}
