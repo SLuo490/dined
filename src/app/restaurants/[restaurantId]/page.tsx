@@ -147,23 +147,23 @@ export default async function RestaurantDetailPage({
     RESTAURANTS.find((r) => r.id === Number(restaurantId)) ?? notFound();
 
   return (
-    <div className="flex min-h-svh flex-col bg-muted">
+    <div className="flex min-h-svh flex-col bg-muted ">
       <Navbar />
 
       {/* Map placeholder */}
-      <div className="h-[450px] w-full bg-gray-300 flex items-center justify-center">
+      <div className="mx-auto w-full max-w-5xl bg-gray-300 flex justify-center items-center h-115">
         <span className="text-gray-500 text-lg font-medium">google map</span>
       </div>
 
       {/* Info section */}
-      <div className="mx-auto w-full max-w-5xl flex flex-col md:flex-row gap-8 px-6 py-10">
+      <div className="mx-auto w-full max-w-5xl flex flex-col md:flex-row gap-8 py-10">
         {/* Restaurant image placeholder */}
-        <div className="h-72 w-full md:w-[300px] shrink-0 bg-gray-300 rounded-lg flex items-center justify-center">
+        <div className="h-72 w-full md:w-75 shrink-0 bg-gray-300 rounded-lg flex items-center justify-center">
           <UtensilsCrossed className="text-gray-400 size-16" />
         </div>
 
         {/* Info */}
-        <div className="flex flex-col gap-3">
+        <div className="flex flex-col gap-3 lg:mx-0 md:mx-0 mx-4">
           <h1 className="text-3xl font-bold tracking-tight">
             {restaurant.name}
           </h1>
