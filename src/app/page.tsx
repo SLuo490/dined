@@ -12,7 +12,7 @@ import {
   CarouselPrevious,
 } from "@/components/ui/carousel";
 import { RestaurantCard } from "@/components/restaurant-card";
-import Autoplay from "embla-carousel-autoplay";
+import AutoScroll from "embla-carousel-auto-scroll";
 import * as React from "react";
 
 const features = [
@@ -82,7 +82,7 @@ const restaurants = [
 
 export default function Home() {
   const plugin = React.useRef(
-    Autoplay({ delay: 700, stopOnInteraction: false }),
+    AutoScroll({ speed: 2, stopOnInteraction: false }),
   );
   return (
     <div className="bg-muted flex min-h-svh flex-col">
@@ -137,8 +137,8 @@ export default function Home() {
               plugins={[plugin.current]}
               opts={{ align: "start", loop: true }}
               className="w-full"
-              onMouseEnter={plugin.current.stop}
-              onMouseLeave={plugin.current.play}
+              onMouseEnter={() => plugin.current.stop()}
+              onMouseLeave={() => plugin.current.play()}
             >
               <CarouselContent className="-ml-4">
                 {restaurants.map((r) => (
