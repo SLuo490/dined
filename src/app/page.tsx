@@ -1,19 +1,9 @@
-"use client";
-
 import Link from "next/link";
 import { CircleCheck } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Navbar } from "@/components/navbar";
-import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
-} from "@/components/ui/carousel";
-import { RestaurantCard } from "@/components/restaurant-card";
-import AutoScroll from "embla-carousel-auto-scroll";
-import * as React from "react";
+import { RestaurantCarousel } from "@/components/restaurant-carousel";
+import { getRestaurants } from "@/lib/queries";
 
 const features = [
   "Track Every Meal",
@@ -22,68 +12,9 @@ const features = [
   "Share Discoveries",
 ];
 
-// Mock Data
-const restaurants = [
-  {
-    id: 1,
-    name: "Barbuto Brooklyn",
-    rating: 5,
-    reviewCount: 123,
-    priceRange: "$50–100",
-    type: "Restaurant",
-    accessible: true,
-  },
-  {
-    id: 2,
-    name: "Le Bernardin",
-    rating: 4.8,
-    reviewCount: 456,
-    priceRange: "$100+",
-    type: "Fine Dining",
-    accessible: false,
-  },
-  {
-    id: 3,
-    name: "Shake Shack",
-    rating: 4.2,
-    reviewCount: 892,
-    priceRange: "$10–30",
-    type: "Casual",
-    accessible: true,
-  },
-  {
-    id: 4,
-    name: "Nobu Downtown",
-    rating: 4.6,
-    reviewCount: 311,
-    priceRange: "$75–150",
-    type: "Japanese",
-    accessible: true,
-  },
-  {
-    id: 5,
-    name: "The Spotted Pig",
-    rating: 4.3,
-    reviewCount: 204,
-    priceRange: "$40–70",
-    type: "Gastropub",
-    accessible: false,
-  },
-  {
-    id: 6,
-    name: "Carbone",
-    rating: 4.7,
-    reviewCount: 589,
-    priceRange: "$80–120",
-    type: "Italian",
-    accessible: true,
-  },
-];
+export default async function Home() {
+  const restaurants = await getRestaurants();
 
-export default function Home() {
-  const plugin = React.useRef(
-    AutoScroll({ speed: 2, stopOnInteraction: false }),
-  );
   return (
     <div className="bg-muted flex min-h-svh flex-col">
       <Navbar />
@@ -133,35 +64,7 @@ export default function Home() {
 
           {/* Restaurant carousel */}
           <div className="w-full max-w-5xl">
-            <Carousel
-              plugins={[plugin.current]}
-              opts={{ align: "start", loop: true }}
-              className="w-full"
-              onMouseEnter={() => plugin.current.stop()}
-              onMouseLeave={() => plugin.current.play()}
-            >
-              <CarouselContent className="-ml-4">
-                {restaurants.map((r) => (
-                  <CarouselItem
-                    key={r.id}
-                    className="pl-4 sm:basis-1/2 md:basis-1/3 lg:basis-1/4"
-                  >
-                    <Link href={`/restaurants/${r.id}`}>
-                      <RestaurantCard
-                        name={r.name}
-                        rating={r.rating}
-                        reviewCount={r.reviewCount}
-                        priceRange={r.priceRange}
-                        type={r.type}
-                        accessible={r.accessible}
-                      />
-                    </Link>
-                  </CarouselItem>
-                ))}
-              </CarouselContent>
-              <CarouselPrevious />
-              <CarouselNext />
-            </Carousel>
+            <RestaurantCarousel restaurants={restaurants} />
           </div>
         </div>
 

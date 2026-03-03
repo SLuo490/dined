@@ -46,3 +46,80 @@ export type LoginFormState =
       };
     }
   | undefined;
+
+// ── Database types ──────────────────────────────────────────────────
+
+export interface Restaurant {
+  id: string;
+  slug: string;
+  name: string;
+  price_range: string;
+  type: string;
+  accessible: boolean;
+  address: string;
+  description: string;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface RestaurantImage {
+  id: string;
+  restaurant_id: string;
+  url: string;
+  alt_text: string;
+  display_order: number;
+  created_at: string;
+}
+
+export interface Review {
+  id: string;
+  restaurant_id: string;
+  user_id: string;
+  rating: number;
+  body: string;
+  visited_on: string | null;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface RestaurantStats {
+  restaurant_id: string;
+  avg_rating: number;
+  review_count: number;
+}
+
+export interface List {
+  id: string;
+  user_id: string;
+  name: string;
+  description: string;
+  is_public: boolean;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface ListItem {
+  id: string;
+  list_id: string;
+  restaurant_id: string;
+  created_at: string;
+}
+
+// ── Composite types ─────────────────────────────────────────────────
+
+export interface RestaurantSummary {
+  id: string;
+  slug: string;
+  name: string;
+  price_range: string;
+  type: string;
+  accessible: boolean;
+  avg_rating: number;
+  review_count: number;
+}
+
+export interface RestaurantDetail extends Restaurant {
+  images: RestaurantImage[];
+  avg_rating: number;
+  review_count: number;
+}
