@@ -1,0 +1,14 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(cd /e/projects/dined && npm run lint 2>&1)",
+      "Bash(cd:*)"
+    ]
+  },
+  "enabledMcpjsonServers": [
+    "supabase",
+    "shadcn",
+    "pal"
+  ],
+  "enableAllProjectMcpServers": true
+}

@@ -18,6 +18,7 @@ No test runner is configured.
 **Stack**: Next.js 16 (App Router), React 19, TypeScript (strict), Tailwind CSS 4, shadcn/ui, Supabase SSR
 
 **Environment variables** (required in `.env.local`):
+
 - `NEXT_PUBLIC_SUPABASE_URL`
 - `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`
 
@@ -26,15 +27,21 @@ No test runner is configured.
 ```
 src/
 ├── app/
-│   ├── (auth)/          # Auth route group: login, signup, confirm-email, confirm (OTP route)
-│   ├── actions/auth.tsx  # Server actions: signUp, signIn
+│   ├── (auth)/              # Auth route group: login, signup, confirm-email, confirm (OTP route)
+│   ├── actions/auth.tsx     # Server actions: signUp, signIn
+│   ├── dashboard/page.tsx   # Dashboard page
+│   ├── restaurants/         # Restaurants page
+│       ├── [restaurantID]   # Restaurant slug
+│       ├── page.tsx         # Detail page for the restaurantID
 │   ├── layout.tsx
 │   └── page.tsx
 ├── components/
 │   ├── login-form.tsx       # Client component using useActionState
+│   ├── logo.tsx             # Logo component (dined)
 │   ├── signup-form.tsx      # Client component using useActionState
 │   ├── navbar.tsx           # Sticky top navbar used on the landing page
 │   ├── restaurant-card.tsx  # Restaurant card with star rating, price range, and accessibility icon
+│   ├── star-rating.tsx      # Shared StarRating component; accepts size prop ("sm"=size-4, "lg"=size-5)
 │   └── ui/                  # shadcn/ui components (button, card, input, field, label, alert, separator, carousel)
 ├── lib/
 │   ├── definitions.ts   # Zod schemas and TypeScript types
@@ -54,6 +61,7 @@ proxy.ts                 # Next.js middleware: refreshes Supabase session on eve
 **Validation**: Zod schemas are defined in `lib/definitions.ts` and run server-side inside the server actions before any Supabase call.
 
 **Auth flow**:
+
 1. Signup → Supabase sends verification email → `/confirm-email` placeholder
 2. Email link → `/confirm` route handler verifies OTP → redirects to next URL or dashboard
 3. Middleware (`proxy.ts` at repo root) refreshes Supabase session cookies on every request
@@ -69,3 +77,5 @@ proxy.ts                 # Next.js middleware: refreshes Supabase session on eve
 The `signIn` server action in `app/actions/auth.tsx` is an empty stub — password login is not yet implemented.
 
 The landing page (`app/page.tsx`) includes a "Popular Restaurants" carousel section below the hero using shadcn's `Carousel` component with mock data. `RestaurantCard` renders a placeholder image, half-star-capable `StarRating`, price range, cuisine type, and optional accessibility icon.
+
+Restaurant detail pages live at `app/restaurants/[restaurantId]/page.tsx` and display a map placeholder, restaurant info (name, `StarRating` with `size="lg"`, review count, price range, type, address, description), and an image carousel. Mock data is hardcoded in that file.
