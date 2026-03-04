@@ -30,21 +30,23 @@ src/
 │   ├── (auth)/              # Auth route group: login, signup, confirm-email, confirm (OTP route)
 │   ├── actions/auth.tsx     # Server actions: signUp, signIn
 │   ├── dashboard/page.tsx   # Dashboard page
-│   ├── restaurants/         # Restaurants page
-│       ├── [restaurantID]   # Restaurant slug
-│       ├── page.tsx         # Detail page for the restaurantID
+│   ├── restaurants/
+│   │   └── [restaurantId]/
+│   │       └── page.tsx     # Server component; fetches via getRestaurantBySlug(slug)
 │   ├── layout.tsx
-│   └── page.tsx
+│   └── page.tsx             # Server component; fetches via getRestaurants()
 ├── components/
-│   ├── login-form.tsx       # Client component using useActionState
-│   ├── logo.tsx             # Logo component (dined)
-│   ├── signup-form.tsx      # Client component using useActionState
-│   ├── navbar.tsx           # Sticky top navbar used on the landing page
-│   ├── restaurant-card.tsx  # Restaurant card with star rating, price range, and accessibility icon
-│   ├── star-rating.tsx      # Shared StarRating component; accepts size prop ("sm"=size-4, "lg"=size-5)
-│   └── ui/                  # shadcn/ui components (button, card, input, field, label, alert, separator, carousel)
+│   ├── login-form.tsx           # Client component using useActionState
+│   ├── logo.tsx                 # Logo component (dined)
+│   ├── signup-form.tsx          # Client component using useActionState
+│   ├── navbar.tsx               # Sticky top navbar used on the landing page
+│   ├── restaurant-card.tsx      # Restaurant card with star rating, price range, and accessibility icon
+│   ├── restaurant-carousel.tsx  # Client component; wraps Carousel + embla-carousel-auto-scroll
+│   ├── star-rating.tsx          # Shared StarRating component; accepts size prop ("sm"=size-4, "lg"=size-5)
+│   └── ui/                      # shadcn/ui components (button, card, input, field, label, alert, separator, carousel)
 ├── lib/
-│   ├── definitions.ts   # Zod schemas and TypeScript types
+│   ├── definitions.ts   # Zod schemas, form types, and DB types (Restaurant, RestaurantSummary, RestaurantDetail, etc.)
+│   ├── queries.ts       # Supabase query helpers: getRestaurants(), getRestaurantBySlug(slug)
 │   ├── utils.ts         # cn() helper (clsx + tailwind-merge)
 │   └── supabase/
 │       ├── server.ts    # Server-side Supabase client (cookie-based)
@@ -52,6 +54,16 @@ src/
 │       └── proxy.ts     # Session refresh helper used by middleware
 └── styles/globals.css   # Tailwind CSS + CSS variable theme tokens
 proxy.ts                 # Next.js middleware: refreshes Supabase session on every request
+supabase/
+├── config.toml
+└── migrations/
+    ├── 001_restaurants.sql           # restaurants table
+    ├── 002_restaurant_images.sql     # restaurant_images table
+    ├── 003_reviews_lists.sql         # reviews, lists, list_items tables
+    ├── 004_restaurant_stats_view.sql # restaurant_stats view (avg_rating, review_count)
+    ├── 005_rls.sql                   # Row Level Security policies
+    ├── 006_seed.sql                  # Initial seed data
+    └── 007_seed_more.sql             # Additional seed data
 ```
 
 ### Key patterns
@@ -72,10 +84,20 @@ proxy.ts                 # Next.js middleware: refreshes Supabase session on eve
 
 **shadcn/ui**: Configured with the Radix Nova style and `@/` path aliases (see `components.json`). Add new components via `npx shadcn@latest add <component>`.
 
+### Data layer
+
+**Query helpers** (`lib/queries.ts`):
+- `getRestaurants()` — fetches all restaurants joined with `restaurant_stats` view; returns `RestaurantSummary[]`
+- `getRestaurantBySlug(slug)` — fetches a single restaurant with its images and stats; returns `RestaurantDetail | null`
+
+**DB types** (`lib/definitions.ts`): `Restaurant`, `RestaurantImage`, `Review`, `RestaurantStats`, `List`, `ListItem`, `RestaurantSummary` (flat card shape), `RestaurantDetail` (extends `Restaurant` with `images`, `avg_rating`, `review_count`).
+
+**RLS**: Public read access is granted to `/` and `/restaurants/**` routes via `005_rls.sql`. All other data requires auth.
+
 ### Current state
 
 The `signIn` server action in `app/actions/auth.tsx` is an empty stub — password login is not yet implemented.
 
-The landing page (`app/page.tsx`) includes a "Popular Restaurants" carousel section below the hero using shadcn's `Carousel` component with mock data. `RestaurantCard` renders a placeholder image, half-star-capable `StarRating`, price range, cuisine type, and optional accessibility icon.
+The landing page (`app/page.tsx`) is a Server Component that calls `getRestaurants()` and passes the result to `<RestaurantCarousel>` (a Client Component). `RestaurantCarousel` uses `embla-carousel-auto-scroll` for continuous auto-scroll with pause-on-hover.
 
-Restaurant detail pages live at `app/restaurants/[restaurantId]/page.tsx` and display a map placeholder, restaurant info (name, `StarRating` with `size="lg"`, review count, price range, type, address, description), and an image carousel. Mock data is hardcoded in that file.
+Restaurant detail pages (`app/restaurants/[restaurantId]/page.tsx`) are Server Components that call `getRestaurantBySlug(slug)` and call `notFound()` on missing slugs. They display a map placeholder, restaurant info (`StarRating` with `size="lg"`, review count, price range, type, address, description), and an image carousel sourced from `restaurant.images`.
