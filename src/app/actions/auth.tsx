@@ -48,7 +48,7 @@ export async function signUp(state: FormState, formData: FormData) {
     };
   }
 
-  redirect("/dashboard");
+  redirect("/");
 }
 
 export async function signIn(state: LoginFormState, formData: FormData) {
@@ -81,7 +81,7 @@ export async function signIn(state: LoginFormState, formData: FormData) {
     };
   }
 
-  redirect("/dashboard");
+  redirect("/");
 }
 
 export async function signOut() {
