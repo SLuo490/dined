@@ -46,9 +46,12 @@ export default async function Home() {
                 <p className="font-medium">{displayName}</p>
                 <p className="text-muted-foreground text-sm">{user.email}</p>
               </CardContent>
-              <CardFooter>
+              <CardFooter className="flex flex-col gap-2">
+                <Button asChild className="w-full">
+                  <Link href="/restaurants">Browse Restaurants</Link>
+                </Button>
                 <form action={signOut} className="w-full">
-                  <Button type="submit" variant="outline" className="w-full">
+                  <Button type="submit" variant="ghost" className="w-full">
                     Sign out
                   </Button>
                 </form>
@@ -65,13 +68,13 @@ export default async function Home() {
   return (
     <div className="bg-muted flex min-h-svh flex-col">
       <Navbar user={null} />
-      <main className="relative flex flex-1 flex-col items-center gap-4 pb-16 px-16 md:p-10 md:pb-16">
+      <main className="relative flex flex-1 flex-col items-center gap-4 pb-16 px-4 sm:px-8 md:p-10 md:pb-16">
         {/* Hero — vertically centered in available space */}
         <div className="flex flex-1 w-full flex-col items-center justify-center gap-8">
           {/* Center hero */}
           <div className="flex w-full max-w-2xl flex-col items-center gap-8 text-center pb-10">
             <div className="flex flex-col gap-4">
-              <h1 className="text-6xl font-bold tracking-tight">
+              <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold tracking-tight">
                 Your Personal Restaurant Diary
               </h1>
               <p className="text-muted-foreground text-lg">
@@ -84,14 +87,10 @@ export default async function Home() {
             {/* CTA buttons */}
             <div className="flex w-full flex-col gap-3 sm:flex-row">
               <Button asChild className="flex-1 h-12">
-                <Link className="py-3 md:py-0" href="/signup">
-                  Get Started
-                </Link>
+                <Link href="/signup">Get Started</Link>
               </Button>
               <Button asChild variant="outline" className="flex-1 h-12">
-                <Link className="py-3 md:py-0" href="/login">
-                  Sign In
-                </Link>
+                <Link href="/login">Sign In</Link>
               </Button>
             </div>
 
@@ -120,7 +119,7 @@ export default async function Home() {
           {["About", "Privacy", "Terms", "Contact"].map((item) => (
             <Link
               key={item}
-              href="#"
+              href={`/${item.toLowerCase()}`}
               className="text-muted-foreground hover:text-foreground text-sm transition-colors"
             >
               {item}

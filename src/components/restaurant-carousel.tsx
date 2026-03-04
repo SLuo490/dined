@@ -29,6 +29,8 @@ export function RestaurantCarousel({
       className="w-full"
       onMouseEnter={() => plugin.current.stop()}
       onMouseLeave={() => plugin.current.play()}
+      onFocus={() => plugin.current.stop()}
+      onBlur={() => plugin.current.play()}
     >
       <CarouselContent className="-ml-4">
         {restaurants.map((r) => (

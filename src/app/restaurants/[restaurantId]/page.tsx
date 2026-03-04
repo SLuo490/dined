@@ -25,19 +25,31 @@ export default async function RestaurantDetailPage({
       <Navbar />
 
       {/* Map placeholder */}
-      <div className="mx-auto w-full max-w-5xl bg-gray-300 flex justify-center items-center h-115">
-        <span className="text-gray-500 text-lg font-medium">google map</span>
+      <div
+        role="img"
+        aria-label="Map coming soon"
+        className="mx-auto w-full max-w-5xl bg-card border border-border flex justify-center items-center h-115"
+      >
+        <span
+          aria-hidden="true"
+          className="text-muted-foreground text-lg font-medium"
+        >
+          Map coming soon
+        </span>
       </div>
 
       {/* Info section */}
-      <div className="mx-auto w-full max-w-5xl flex flex-col md:flex-row gap-8 py-10">
+      <div className="mx-auto w-full max-w-5xl flex flex-col md:flex-row gap-8 py-10 px-4 md:px-6">
         {/* Restaurant image placeholder */}
-        <div className="h-72 w-full md:w-75 shrink-0 bg-gray-300 rounded-lg flex items-center justify-center">
-          <UtensilsCrossed className="text-gray-400 size-16" />
+        <div className="h-72 w-full md:w-75 shrink-0 bg-card border border-border rounded-lg flex items-center justify-center">
+          <UtensilsCrossed
+            aria-hidden="true"
+            className="text-muted-foreground size-16"
+          />
         </div>
 
         {/* Info */}
-        <div className="flex flex-col gap-3 lg:mx-0 md:mx-0 mx-4">
+        <div className="flex flex-col gap-3">
           <h1 className="text-3xl font-bold tracking-tight">
             {restaurant.name}
           </h1>
@@ -64,8 +76,8 @@ export default async function RestaurantDetailPage({
                 key={image.id}
                 className="pl-4 sm:basis-1/2 md:basis-1/3 lg:basis-1/4"
               >
-                <div className="h-40 bg-gray-300 rounded-lg flex items-center justify-center">
-                  <span className="text-gray-500 text-sm">
+                <div className="h-40 bg-card border border-border rounded-lg flex items-center justify-center">
+                  <span className="text-muted-foreground text-sm">
                     {image.alt_text}
                   </span>
                 </div>
