@@ -4,20 +4,24 @@ import type { RestaurantSummary, RestaurantDetail } from "@/lib/definitions";
 export async function getRestaurants(): Promise<RestaurantSummary[]> {
   const supabase = await createClient();
 
+  const { data: stats, error: sError } = await supabase
+    .from("restaurant_stats")
+    .select("restaurant_id, avg_rating, review_count")
+    .gte("avg_rating", 4);
+
+  if (sError || !stats?.length) return [];
+
+  const statsMap = new Map(stats.map((s) => [s.restaurant_id, s]));
+  const qualifyingIds = stats.map((s) => s.restaurant_id);
+
   const { data: restaurants, error: rError } = await supabase
     .from("restaurants")
     .select("id, slug, name, price_range, type, accessible")
-    .order("name");
+    .in("id", qualifyingIds)
+    .order("name")
+    .limit(10);
 
   if (rError || !restaurants) return [];
-
-  const { data: stats, error: sError } = await supabase
-    .from("restaurant_stats")
-    .select("restaurant_id, avg_rating, review_count");
-
-  const statsMap = new Map(
-    (sError ? [] : (stats ?? [])).map((s) => [s.restaurant_id, s]),
-  );
 
   return restaurants.map((r) => {
     const s = statsMap.get(r.id);
