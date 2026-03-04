@@ -6,8 +6,14 @@ import { Search, Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Logo } from "@/components/logo";
+import { signOut } from "@/app/actions/auth";
 
-export function Navbar() {
+type NavbarUser = {
+  email?: string;
+  user_metadata?: { full_name?: string };
+} | null;
+
+export function Navbar({ user }: { user?: NavbarUser }) {
   const [open, setOpen] = useState(false);
 
   return (
@@ -55,12 +61,22 @@ export function Navbar() {
 
         {/* Auth buttons */}
         <div className="hidden md:flex items-center gap-2">
-          <Button variant="outline" size="sm" asChild>
-            <Link href="/login">Login</Link>
-          </Button>
-          <Button size="sm" asChild>
-            <Link href="/signup">Sign up</Link>
-          </Button>
+          {user ? (
+            <form action={signOut}>
+              <Button variant="outline" size="sm" type="submit">
+                Sign out
+              </Button>
+            </form>
+          ) : (
+            <>
+              <Button variant="outline" size="sm" asChild>
+                <Link href="/login">Login</Link>
+              </Button>
+              <Button size="sm" asChild>
+                <Link href="/signup">Sign up</Link>
+              </Button>
+            </>
+          )}
         </div>
 
         {/* Mobile hamburger */}
@@ -112,16 +128,32 @@ export function Navbar() {
             <Input placeholder="Search..." className="pl-9" />
           </div>
           <div className="flex gap-2">
-            <Button variant="outline" size="sm" className="flex-1" asChild>
-              <Link href="/login" onClick={() => setOpen(false)}>
-                Login
-              </Link>
-            </Button>
-            <Button size="sm" className="flex-1" asChild>
-              <Link href="/signup" onClick={() => setOpen(false)}>
-                Sign up
-              </Link>
-            </Button>
+            {user ? (
+              <form action={signOut} className="flex-1">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="w-full"
+                  type="submit"
+                  onClick={() => setOpen(false)}
+                >
+                  Sign out
+                </Button>
+              </form>
+            ) : (
+              <>
+                <Button variant="outline" size="sm" className="flex-1" asChild>
+                  <Link href="/login" onClick={() => setOpen(false)}>
+                    Login
+                  </Link>
+                </Button>
+                <Button size="sm" className="flex-1" asChild>
+                  <Link href="/signup" onClick={() => setOpen(false)}>
+                    Sign up
+                  </Link>
+                </Button>
+              </>
+            )}
           </div>
         </div>
       )}

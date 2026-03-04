@@ -1,9 +1,19 @@
 import Link from "next/link";
 import { CircleCheck } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+  CardContent,
+  CardFooter,
+} from "@/components/ui/card";
 import { Navbar } from "@/components/navbar";
 import { RestaurantCarousel } from "@/components/restaurant-carousel";
 import { getRestaurants } from "@/lib/queries";
+import { createClient } from "@/lib/supabase/server";
+import { signOut } from "@/app/actions/auth";
 
 const features = [
   "Track Every Meal",
@@ -13,11 +23,48 @@ const features = [
 ];
 
 export default async function Home() {
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (user) {
+    const displayName = user.user_metadata?.full_name ?? user.email;
+    return (
+      <div className="bg-muted flex min-h-svh flex-col">
+        <Navbar user={user} />
+        <main className="flex flex-1 flex-col items-center justify-center p-6 md:p-10">
+          <div className="w-full max-w-sm">
+            <Card>
+              <CardHeader>
+                <CardTitle>Welcome back</CardTitle>
+                <CardDescription>
+                  You are signed in to your account.
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="flex flex-col gap-1">
+                <p className="font-medium">{displayName}</p>
+                <p className="text-muted-foreground text-sm">{user.email}</p>
+              </CardContent>
+              <CardFooter>
+                <form action={signOut} className="w-full">
+                  <Button type="submit" variant="outline" className="w-full">
+                    Sign out
+                  </Button>
+                </form>
+              </CardFooter>
+            </Card>
+          </div>
+        </main>
+      </div>
+    );
+  }
+
   const restaurants = await getRestaurants();
 
   return (
     <div className="bg-muted flex min-h-svh flex-col">
-      <Navbar />
+      <Navbar user={null} />
       <main className="relative flex flex-1 flex-col items-center gap-4 pb-16 px-16 md:p-10 md:pb-16">
         {/* Hero — vertically centered in available space */}
         <div className="flex flex-1 w-full flex-col items-center justify-center gap-8">
