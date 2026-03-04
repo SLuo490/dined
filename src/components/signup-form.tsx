@@ -12,6 +12,7 @@ import {
 import {
   Field,
   FieldDescription,
+  FieldError,
   FieldGroup,
   FieldLabel,
 } from "@/components/ui/field";
@@ -41,7 +42,6 @@ export function SignupForm({
         </CardHeader>
         <CardContent>
           <form action={action}>
-            {/* Display Errors */}
             {state?.message && (
               <Alert
                 variant="destructive"
@@ -67,7 +67,9 @@ export function SignupForm({
                   required
                 />
                 {state?.errors?.name && (
-                  <p className="text-red-500">{state.errors.name}</p>
+                  <FieldError
+                    errors={state.errors.name.map((m) => ({ message: m }))}
+                  />
                 )}
               </Field>
               <Field>
@@ -80,50 +82,45 @@ export function SignupForm({
                   defaultValue={state?.inputs?.email}
                   required
                 />
+                {state?.errors?.email && (
+                  <FieldError
+                    errors={state.errors.email.map((m) => ({ message: m }))}
+                  />
+                )}
               </Field>
-              {state?.errors?.email && <p>{state.errors.email}</p>}
               <Field>
-                <Field className="grid  gap-1">
-                  <Field>
-                    <FieldLabel htmlFor="password">Password</FieldLabel>
-                    <Input
-                      id="password"
-                      name="password"
-                      type="password"
-                      defaultValue={state?.inputs?.password}
-                      required
-                    />
-                  </Field>
-                </Field>
+                <FieldLabel htmlFor="password">Password</FieldLabel>
+                <Input
+                  id="password"
+                  name="password"
+                  type="password"
+                  required
+                />
                 {state?.errors?.password ? (
-                  <div className="text-red-500">
-                    <p>Password must:</p>
-                    <ul>
-                      {state.errors.password.map((error) => (
-                        <li key={error}>- {error}</li>
-                      ))}
-                    </ul>
-                  </div>
+                  <FieldError
+                    errors={state.errors.password.map((m) => ({ message: m }))}
+                  />
                 ) : (
                   <FieldDescription>
                     Must be at least 8 characters long.
                   </FieldDescription>
                 )}
               </Field>
-              <Field>
-                <Button type="submit">Create Account</Button>
-                <FieldDescription className="text-center">
-                  Already have an account? <Link href="/login">Sign in</Link>
-                </FieldDescription>
-              </Field>
             </FieldGroup>
+            <Button type="submit" className="w-full mt-4" disabled={isPending}>
+              {isPending ? "Creating account..." : "Create Account"}
+            </Button>
+            <p className="text-muted-foreground text-center text-sm mt-3">
+              Already have an account? <Link href="/login">Sign in</Link>
+            </p>
           </form>
         </CardContent>
       </Card>
-      <FieldDescription className="px-3 text-center">
-        By clicking continue, you agree to our <a href="#">Terms of Service</a>{" "}
-        and <a href="#">Privacy Policy</a>.
-      </FieldDescription>
+      <p className="px-3 text-center text-muted-foreground text-sm leading-normal">
+        By clicking continue, you agree to our{" "}
+        <Link href="/terms">Terms of Service</Link> and{" "}
+        <Link href="/privacy">Privacy Policy</Link>.
+      </p>
     </div>
   );
 }
