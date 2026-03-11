@@ -10,19 +10,25 @@ import {
   CarouselNext,
 } from "@/components/ui/carousel";
 import { getRestaurantBySlug } from "@/lib/queries";
+import { createClient } from "@/lib/supabase/server";
 
 export default async function RestaurantDetailPage({
   params,
 }: {
   params: Promise<{ restaurantId: string }>;
 }) {
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
   const { restaurantId } = await params;
   const restaurant = await getRestaurantBySlug(restaurantId);
   if (!restaurant) notFound();
 
   return (
     <div className="flex min-h-svh flex-col bg-muted ">
-      <Navbar />
+      <Navbar user={user} />
 
       {/* Map placeholder */}
       <div

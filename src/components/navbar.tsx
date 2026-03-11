@@ -41,7 +41,7 @@ export function Navbar({ user }: { user?: NavbarUser }) {
                   "transition-colors",
                   pathname === href
                     ? "text-foreground underline underline-offset-4 decoration-primary"
-                    : "text-foreground/60 hover:text-foreground"
+                    : "text-foreground/60 hover:text-foreground",
                 )}
               >
                 {label}
@@ -95,59 +95,61 @@ export function Navbar({ user }: { user?: NavbarUser }) {
         id="mobile-menu"
         hidden={!open}
         className="md:hidden border-t bg-background px-6 py-4 flex flex-col gap-4"
-        onKeyDown={(e) => { if (e.key === "Escape") setOpen(false); }}
+        onKeyDown={(e) => {
+          if (e.key === "Escape") setOpen(false);
+        }}
       >
-          <nav className="flex flex-col gap-3 text-sm">
-            {navLinks.map(({ href, label }) => (
-              <Button key={href} variant="ghost" asChild>
-                <Link
-                  href={href}
-                  className={cn(
-                    "transition-colors",
-                    pathname === href
-                      ? "text-foreground underline underline-offset-4 decoration-primary"
-                      : "text-foreground/60 hover:text-foreground"
-                  )}
-                  onClick={() => setOpen(false)}
-                >
-                  {label}
+        <nav className="flex flex-col gap-3 text-sm">
+          {navLinks.map(({ href, label }) => (
+            <Button key={href} variant="ghost" asChild>
+              <Link
+                href={href}
+                className={cn(
+                  "transition-colors",
+                  pathname === href
+                    ? "text-foreground underline underline-offset-4 decoration-primary"
+                    : "text-foreground/60 hover:text-foreground",
+                )}
+                onClick={() => setOpen(false)}
+              >
+                {label}
+              </Link>
+            </Button>
+          ))}
+        </nav>
+        <div className="relative">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground pointer-events-none" />
+          <Input placeholder="Search..." className="pl-9" />
+        </div>
+        <div className="flex gap-2">
+          {user ? (
+            <form action={signOut} className="flex-1">
+              <Button
+                variant="outline"
+                size="sm"
+                className="w-full"
+                type="submit"
+                onClick={() => setOpen(false)}
+              >
+                Sign out
+              </Button>
+            </form>
+          ) : (
+            <>
+              <Button variant="outline" size="sm" className="flex-1" asChild>
+                <Link href="/login" onClick={() => setOpen(false)}>
+                  Login
                 </Link>
               </Button>
-            ))}
-          </nav>
-          <div className="relative">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground pointer-events-none" />
-            <Input placeholder="Search..." className="pl-9" />
-          </div>
-          <div className="flex gap-2">
-            {user ? (
-              <form action={signOut} className="flex-1">
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className="w-full"
-                  type="submit"
-                  onClick={() => setOpen(false)}
-                >
-                  Sign out
-                </Button>
-              </form>
-            ) : (
-              <>
-                <Button variant="outline" size="sm" className="flex-1" asChild>
-                  <Link href="/login" onClick={() => setOpen(false)}>
-                    Login
-                  </Link>
-                </Button>
-                <Button size="sm" className="flex-1" asChild>
-                  <Link href="/signup" onClick={() => setOpen(false)}>
-                    Sign up
-                  </Link>
-                </Button>
-              </>
-            )}
-          </div>
+              <Button size="sm" className="flex-1" asChild>
+                <Link href="/signup" onClick={() => setOpen(false)}>
+                  Sign up
+                </Link>
+              </Button>
+            </>
+          )}
         </div>
+      </div>
     </header>
   );
 }
