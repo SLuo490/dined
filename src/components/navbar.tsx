@@ -2,19 +2,28 @@
 
 import Link from "next/link";
 import { useState } from "react";
+import { usePathname } from "next/navigation";
 import { Search, Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Logo } from "@/components/logo";
 import { signOut } from "@/app/actions/auth";
+import { cn } from "@/lib/utils";
 
 type NavbarUser = {
   email?: string;
   user_metadata?: { full_name?: string };
 } | null;
 
+const navLinks = [
+  { href: "/", label: "Home" },
+  { href: "/restaurants", label: "Restaurants" },
+  { href: "/list", label: "List" },
+];
+
 export function Navbar({ user }: { user?: NavbarUser }) {
   const [open, setOpen] = useState(false);
+  const pathname = usePathname();
 
   return (
     <header className="sticky top-0 z-50 border-b bg-background">
@@ -24,33 +33,21 @@ export function Navbar({ user }: { user?: NavbarUser }) {
 
         {/* Desktop nav links */}
         <nav className="hidden md:flex gap-10 text-sm font-semibold">
-          <Button variant="ghost">
-            <Link
-              href="/"
-              className="text-foreground/80 hover:text-foreground transition-colors"
-              onClick={() => setOpen(false)}
-            >
-              Home
-            </Link>
-          </Button>
-          <Button variant="ghost">
-            <Link
-              href="/restaurants"
-              className="text-foreground/80 hover:text-foreground transition-colors"
-              onClick={() => setOpen(false)}
-            >
-              Restaurants
-            </Link>
-          </Button>
-          <Button variant="ghost">
-            <Link
-              href="/list"
-              className="text-foreground/80 hover:text-foreground transition-colors"
-              onClick={() => setOpen(false)}
-            >
-              List
-            </Link>
-          </Button>
+          {navLinks.map(({ href, label }) => (
+            <Button key={href} variant="ghost" asChild>
+              <Link
+                href={href}
+                className={cn(
+                  "transition-colors",
+                  pathname === href
+                    ? "text-foreground underline underline-offset-4 decoration-primary"
+                    : "text-foreground/60 hover:text-foreground",
+                )}
+              >
+                {label}
+              </Link>
+            </Button>
+          ))}
         </nav>
 
         {/* Search bar */}
@@ -86,77 +83,73 @@ export function Navbar({ user }: { user?: NavbarUser }) {
           className="md:hidden"
           onClick={() => setOpen(!open)}
           aria-label="Toggle menu"
+          aria-expanded={open}
+          aria-controls="mobile-menu"
         >
           {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
         </Button>
       </div>
 
       {/* Mobile dropdown */}
-      {open && (
-        <div className="md:hidden border-t bg-background px-6 py-4 flex flex-col gap-4">
-          <nav className="flex flex-col gap-3 text-sm">
-            <Button variant="ghost">
+      <div
+        id="mobile-menu"
+        hidden={!open}
+        className="md:hidden border-t bg-background px-6 py-4 flex flex-col gap-4"
+        onKeyDown={(e) => {
+          if (e.key === "Escape") setOpen(false);
+        }}
+      >
+        <nav className="flex flex-col gap-3 text-sm">
+          {navLinks.map(({ href, label }) => (
+            <Button key={href} variant="ghost" asChild>
               <Link
-                href="/"
-                className="text-foreground/80 hover:text-foreground transition-colors"
+                href={href}
+                className={cn(
+                  "transition-colors",
+                  pathname === href
+                    ? "text-foreground underline underline-offset-4 decoration-primary"
+                    : "text-foreground/60 hover:text-foreground",
+                )}
                 onClick={() => setOpen(false)}
               >
-                Home
+                {label}
               </Link>
             </Button>
-            <Button variant="ghost">
-              <Link
-                href="/restaurants"
-                className="text-foreground/80 hover:text-foreground transition-colors"
-                onClick={() => setOpen(false)}
-              >
-                Restaurants
-              </Link>
-            </Button>
-            <Button variant="ghost">
-              <Link
-                href="/list"
-                className="text-foreground/80 hover:text-foreground transition-colors"
-                onClick={() => setOpen(false)}
-              >
-                List
-              </Link>
-            </Button>
-          </nav>
-          <div className="relative">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground pointer-events-none" />
-            <Input placeholder="Search..." className="pl-9" />
-          </div>
-          <div className="flex gap-2">
-            {user ? (
-              <form action={signOut} className="flex-1">
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className="w-full"
-                  type="submit"
-                  onClick={() => setOpen(false)}
-                >
-                  Sign out
-                </Button>
-              </form>
-            ) : (
-              <>
-                <Button variant="outline" size="sm" className="flex-1" asChild>
-                  <Link href="/login" onClick={() => setOpen(false)}>
-                    Login
-                  </Link>
-                </Button>
-                <Button size="sm" className="flex-1" asChild>
-                  <Link href="/signup" onClick={() => setOpen(false)}>
-                    Sign up
-                  </Link>
-                </Button>
-              </>
-            )}
-          </div>
+          ))}
+        </nav>
+        <div className="relative">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground pointer-events-none" />
+          <Input placeholder="Search..." className="pl-9" />
         </div>
-      )}
+        <div className="flex gap-2">
+          {user ? (
+            <form action={signOut} className="flex-1">
+              <Button
+                variant="outline"
+                size="sm"
+                className="w-full"
+                type="submit"
+                onClick={() => setOpen(false)}
+              >
+                Sign out
+              </Button>
+            </form>
+          ) : (
+            <>
+              <Button variant="outline" size="sm" className="flex-1" asChild>
+                <Link href="/login" onClick={() => setOpen(false)}>
+                  Login
+                </Link>
+              </Button>
+              <Button size="sm" className="flex-1" asChild>
+                <Link href="/signup" onClick={() => setOpen(false)}>
+                  Sign up
+                </Link>
+              </Button>
+            </>
+          )}
+        </div>
+      </div>
     </header>
   );
 }
