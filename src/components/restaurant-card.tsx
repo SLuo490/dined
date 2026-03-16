@@ -26,7 +26,7 @@ export function RestaurantCard({
         <UtensilsCrossed aria-hidden="true" className="text-muted-foreground/30 size-12" />
       </div>
       <CardHeader>
-        <CardTitle className="text-base font-semibold">{name}</CardTitle>
+        <CardTitle className="font-display text-base font-semibold">{name}</CardTitle>
       </CardHeader>
       <CardContent className="flex flex-col gap-1.5 pb-6">
         <div className="flex items-center gap-1.5 text-sm">

@@ -1,5 +1,4 @@
 import Link from "next/link";
-import { CircleCheck } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -11,16 +10,12 @@ import {
 } from "@/components/ui/card";
 import { Navbar } from "@/components/navbar";
 import { RestaurantCarousel } from "@/components/restaurant-carousel";
-import { getRestaurants } from "@/lib/queries";
+import { LandingStatsBar } from "@/components/landing-stats-bar";
+import { LandingFeatures } from "@/components/landing-features";
+import { LandingCta } from "@/components/landing-cta";
+import { getRestaurants, getLandingStats } from "@/lib/queries";
 import { createClient } from "@/lib/supabase/server";
 import { signOut } from "@/app/actions/auth";
-
-const features = [
-  "Track Every Meal",
-  "Rate & Review",
-  "Build Lists",
-  "Share Discoveries",
-];
 
 export default async function Home() {
   const supabase = await createClient();
@@ -63,69 +58,74 @@ export default async function Home() {
     );
   }
 
-  const restaurants = await getRestaurants();
+  const [restaurants, stats] = await Promise.all([
+    getRestaurants(),
+    getLandingStats(),
+  ]);
 
   return (
-    <div className="bg-muted flex min-h-svh flex-col">
+    <div className="flex min-h-svh flex-col">
       <Navbar user={null} />
-      <main className="relative flex flex-1 flex-col items-center gap-4 pb-16 px-4 sm:px-8 md:p-10 md:pb-16">
-        {/* Hero — vertically centered in available space */}
-        <div className="flex flex-1 w-full flex-col items-center justify-center gap-8">
-          {/* Center hero */}
-          <div className="flex w-full max-w-2xl flex-col items-center gap-8 text-center pb-10">
-            <div className="flex flex-col gap-4">
-              <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold tracking-tight">
-                Your Personal Restaurant Diary
-              </h1>
-              <p className="text-muted-foreground text-lg">
-                Document every meal, rate your experiences, and build your
-                culinary story. Join thousands of food lovers tracking their
-                dining adventures.
-              </p>
-            </div>
 
-            {/* CTA buttons */}
-            <div className="flex w-full flex-col gap-3 sm:flex-row">
-              <Button asChild className="flex-1 h-12">
-                <Link href="/signup">Get Started</Link>
-              </Button>
-              <Button asChild variant="outline" className="flex-1 h-12">
-                <Link href="/login">Sign In</Link>
-              </Button>
-            </div>
+      {/* Hero */}
+      <section className="bg-muted flex flex-col items-center justify-center px-4 sm:px-8 py-20 text-center gap-8">
+        <div className="flex max-w-2xl flex-col gap-4">
+          <h1 className="font-display text-4xl sm:text-5xl md:text-6xl font-bold tracking-tight">
+            Your Personal
+            <br className="hidden sm:block" />
+            Restaurant Diary
+          </h1>
+          <p className="text-muted-foreground text-lg">
+            Document every meal, rate your experiences, and build your culinary
+            story. Join thousands of food lovers tracking their dining
+            adventures.
+          </p>
+        </div>
+        <div className="flex w-full max-w-sm flex-col gap-3 sm:flex-row">
+          <Button asChild className="flex-1 h-12">
+            <Link href="/signup">Get Started</Link>
+          </Button>
+          <Button asChild variant="outline" className="flex-1 h-12">
+            <Link href="/login">Sign In</Link>
+          </Button>
+        </div>
+      </section>
 
-            {/* Feature pills */}
-            <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-2">
-              {features.map((feature) => (
-                <span
-                  key={feature}
-                  className="text-muted-foreground flex items-center gap-1.5 text-sm"
+      <LandingStatsBar stats={stats} />
+
+      <main className="flex flex-col items-center gap-16 py-16 bg-background">
+        <LandingFeatures />
+
+        {/* Restaurant carousel section */}
+        <section className="w-full max-w-5xl mx-auto px-4 sm:px-8">
+          <h2 className="font-display text-2xl sm:text-3xl font-bold tracking-tight text-center mb-10">
+            Top-rated restaurants
+          </h2>
+          <RestaurantCarousel restaurants={restaurants} />
+        </section>
+
+        <LandingCta />
+
+        {/* Footer */}
+        <footer className="w-full border-t border-border pt-8 px-4 sm:px-8">
+          <div className="mx-auto max-w-5xl flex flex-col sm:flex-row items-center justify-between gap-4">
+            <p className="text-sm text-muted-foreground">
+              <span className="font-semibold text-foreground">dined</span> —
+              your personal restaurant diary
+            </p>
+            <div className="flex flex-wrap items-center justify-center gap-x-5 gap-y-1">
+              {["About", "Privacy", "Terms", "Contact"].map((item) => (
+                <Link
+                  key={item}
+                  href={`/${item.toLowerCase()}`}
+                  className="text-muted-foreground hover:text-foreground text-sm transition-colors"
                 >
-                  <CircleCheck className="text-primary size-4" />
-                  {feature}
-                </span>
+                  {item}
+                </Link>
               ))}
             </div>
           </div>
-
-          {/* Restaurant carousel */}
-          <div className="w-full max-w-5xl">
-            <RestaurantCarousel restaurants={restaurants} />
-          </div>
-        </div>
-
-        {/* Footer */}
-        <div className="absolute bottom-6 flex flex-wrap items-center justify-center gap-x-5 gap-y-1">
-          {["About", "Privacy", "Terms", "Contact"].map((item) => (
-            <Link
-              key={item}
-              href={`/${item.toLowerCase()}`}
-              className="text-muted-foreground hover:text-foreground text-sm transition-colors"
-            >
-              {item}
-            </Link>
-          ))}
-        </div>
+        </footer>
       </main>
     </div>
   );
