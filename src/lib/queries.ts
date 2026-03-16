@@ -1,6 +1,35 @@
 import { createClient } from "@/lib/supabase/server";
 import type { RestaurantSummary, RestaurantDetail } from "@/lib/definitions";
 
+export interface LandingStats {
+  restaurantCount: number;
+  reviewCount: number;
+  listCount: number;
+}
+
+export async function getLandingStats(): Promise<LandingStats> {
+  const supabase = await createClient();
+
+  const [
+    { count: restaurantCount },
+    { count: reviewCount },
+    { count: listCount },
+  ] = await Promise.all([
+    supabase.from("restaurants").select("*", { count: "exact", head: true }),
+    supabase.from("reviews").select("*", { count: "exact", head: true }),
+    supabase
+      .from("lists")
+      .select("*", { count: "exact", head: true })
+      .eq("is_public", true),
+  ]);
+
+  return {
+    restaurantCount: restaurantCount ?? 0,
+    reviewCount: reviewCount ?? 0,
+    listCount: listCount ?? 0,
+  };
+}
+
 export async function getRestaurants(): Promise<RestaurantSummary[]> {
   const supabase = await createClient();
 

@@ -21,12 +21,17 @@ export function RestaurantCard({
   accessible,
 }: RestaurantCardProps) {
   return (
-    <Card className="py-0 transition-shadow hover:shadow-md hover:ring-2 hover:ring-ring/30 focus-within:ring-2 focus-within:ring-ring/50 cursor-pointer">
-      <div className="bg-muted flex h-44 items-center justify-center">
-        <UtensilsCrossed aria-hidden="true" className="text-muted-foreground/30 size-12" />
+    <Card className="group py-0 overflow-hidden transition-all duration-200 hover:shadow-lg hover:ring-2 hover:ring-ring/30 focus-within:ring-2 focus-within:ring-ring/50 cursor-pointer">
+      <div className="relative flex h-44 items-center justify-center overflow-hidden bg-amber-tint transition-transform duration-300 group-hover:scale-105">
+        <UtensilsCrossed
+          aria-hidden="true"
+          className="size-12 opacity-25 [color:var(--chart-1)]"
+        />
       </div>
       <CardHeader>
-        <CardTitle className="text-base font-semibold">{name}</CardTitle>
+        <CardTitle className="font-display text-base font-semibold">
+          {name}
+        </CardTitle>
       </CardHeader>
       <CardContent className="flex flex-col gap-1.5 pb-6">
         <div className="flex items-center gap-1.5 text-sm">
