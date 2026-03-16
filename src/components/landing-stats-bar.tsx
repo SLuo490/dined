@@ -28,13 +28,15 @@ export function LandingStatsBar({ stats }: { stats: LandingStats }) {
         {statItems(stats).map((item) => (
           <div
             key={item.label}
-            className="flex flex-1 flex-col items-center gap-1 py-5 px-4"
+            className="flex flex-1 flex-col items-center gap-1 py-5 px-4 "
           >
-            {item.icon}
-            <span className="text-3xl font-bold tabular-nums">
+            <span className="mb-3 flex size-10 items-center justify-center rounded-lg bg-amber-tint">
+              {item.icon}
+            </span>
+            <span className="text-3xl font-bold tabular-nums  ">
               {item.value}
             </span>
-            <span className="text-xs uppercase tracking-wide text-muted-foreground">
+            <span className="text-xs uppercase tracking-wide text-muted-foreground ">
               {item.label}
             </span>
           </div>

@@ -16,6 +16,8 @@ import { LandingCta } from "@/components/landing-cta";
 import { getRestaurants, getLandingStats } from "@/lib/queries";
 import { createClient } from "@/lib/supabase/server";
 import { signOut } from "@/app/actions/auth";
+import { Footer } from "@/components/footer";
+import { Highlight } from "@/components/ui/highlight";
 
 export default async function Home() {
   const supabase = await createClient();
@@ -68,12 +70,12 @@ export default async function Home() {
       <Navbar user={null} />
 
       {/* Hero */}
-      <section className="bg-muted flex flex-col items-center justify-center px-4 sm:px-8 py-20 text-center gap-8">
-        <div className="flex max-w-2xl flex-col gap-4">
+      <section className="bg-amber-wash flex flex-col items-center justify-center px-4 sm:px-8 py-20 text-center gap-8">
+        <div className="flex max-w-2xl flex-col gap-4 mt-20 mb-10">
           <h1 className="font-display text-4xl sm:text-5xl md:text-6xl font-bold tracking-tight">
             Your Personal
             <br className="hidden sm:block" />
-            Restaurant Diary
+            <Highlight>Restaurant Diary</Highlight>
           </h1>
           <p className="text-muted-foreground text-lg">
             Document every meal, rate your experiences, and build your culinary
@@ -81,11 +83,11 @@ export default async function Home() {
             adventures.
           </p>
         </div>
-        <div className="flex w-full max-w-sm flex-col gap-3 sm:flex-row">
-          <Button asChild className="flex-1 h-12">
+        <div className="flex w-full max-w-sm flex-col gap-3 sm:flex-row mb-10">
+          <Button asChild className="flex-1 h-12 py-2">
             <Link href="/signup">Get Started</Link>
           </Button>
-          <Button asChild variant="outline" className="flex-1 h-12">
+          <Button asChild variant="outline" className="flex-1 h-12 py-2">
             <Link href="/login">Sign In</Link>
           </Button>
         </div>
@@ -96,36 +98,16 @@ export default async function Home() {
       <main className="flex flex-col items-center gap-16 py-16 bg-background">
         <LandingFeatures />
 
-        {/* Restaurant carousel section */}
-        <section className="w-full max-w-5xl mx-auto px-4 sm:px-8">
-          <h2 className="font-display text-2xl sm:text-3xl font-bold tracking-tight text-center mb-10">
+        {/* Restaurant carousel section — full-bleed with contained heading */}
+        <section className="w-full">
+          <h2 className="font-display text-2xl sm:text-3xl font-bold tracking-tight text-center mb-10 px-4">
             Top-rated restaurants
           </h2>
           <RestaurantCarousel restaurants={restaurants} />
         </section>
 
         <LandingCta />
-
-        {/* Footer */}
-        <footer className="w-full border-t border-border pt-8 px-4 sm:px-8">
-          <div className="mx-auto max-w-5xl flex flex-col sm:flex-row items-center justify-between gap-4">
-            <p className="text-sm text-muted-foreground">
-              <span className="font-semibold text-foreground">dined</span> —
-              your personal restaurant diary
-            </p>
-            <div className="flex flex-wrap items-center justify-center gap-x-5 gap-y-1">
-              {["About", "Privacy", "Terms", "Contact"].map((item) => (
-                <Link
-                  key={item}
-                  href={`/${item.toLowerCase()}`}
-                  className="text-muted-foreground hover:text-foreground text-sm transition-colors"
-                >
-                  {item}
-                </Link>
-              ))}
-            </div>
-          </div>
-        </footer>
+        <Footer />
       </main>
     </div>
   );

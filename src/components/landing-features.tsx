@@ -40,11 +40,8 @@ export function LandingFeatures() {
           return (
             <Card key={feature.title}>
               <CardHeader className="pb-2">
-                <div className="mb-3 flex size-10 items-center justify-center rounded-lg bg-[oklch(0.97_0.03_75)]">
-                  <Icon
-                    aria-hidden="true"
-                    className="size-5 [color:var(--chart-1)]"
-                  />
+                <div className="mb-3 flex size-10 items-center justify-center rounded-lg bg-amber-tint">
+                  <Icon aria-hidden="true" className="size-5 text-chart-1" />
                 </div>
                 <CardTitle className="font-display text-base">
                   {feature.title}
