@@ -34,8 +34,11 @@ src/
 │   │   └── [restaurantId]/
 │   │       └── page.tsx     # Server component; fetches via getRestaurantBySlug(slug)
 │   ├── layout.tsx
-│   └── page.tsx             # Server component; fetches via getRestaurants()
+│   └── page.tsx             # Server component; fetches via getRestaurants() + getLandingStats()
 ├── components/
+│   ├── landing-stats-bar.tsx    # Live stats strip (restaurant count, reviews, public lists) with amber icon tint
+│   ├── landing-features.tsx     # 4-card feature grid (Track, Rate, Lists, Share) with font-display titles
+│   ├── landing-cta.tsx          # Bottom CTA section with warm-tinted card and signup/login buttons
 │   ├── login-form.tsx           # Client component using useActionState
 │   ├── logo.tsx                 # Logo component (dined)
 │   ├── signup-form.tsx          # Client component using useActionState
@@ -82,13 +85,17 @@ supabase/
 
 **Styling**: Tailwind CSS 4 with CSS variable-based theming. Use the `cn()` utility for conditional class merging. Component variants are managed with `class-variance-authority` (CVA). Dark mode is toggled via the `.dark` class.
 
+**Typography**: Playfair Display SC is loaded as `--font-playfair-display-sc` (via `next/font/google`) and exposed as `--font-display` in `@theme inline`. Apply with the `.font-display` utility class or `font-display` Tailwind class. Use it for headings, section titles, and card names.
+
 **shadcn/ui**: Configured with the Radix Nova style and `@/` path aliases (see `components.json`). Add new components via `npx shadcn@latest add <component>`.
 
 ### Data layer
 
 **Query helpers** (`lib/queries.ts`):
+
 - `getRestaurants()` — fetches all restaurants joined with `restaurant_stats` view; returns `RestaurantSummary[]`
 - `getRestaurantBySlug(slug)` — fetches a single restaurant with its images and stats; returns `RestaurantDetail | null`
+- `getLandingStats()` — parallel count queries for restaurants, reviews, and public lists; returns `LandingStats`
 
 **DB types** (`lib/definitions.ts`): `Restaurant`, `RestaurantImage`, `Review`, `RestaurantStats`, `List`, `ListItem`, `RestaurantSummary` (flat card shape), `RestaurantDetail` (extends `Restaurant` with `images`, `avg_rating`, `review_count`).
 
@@ -98,6 +105,33 @@ supabase/
 
 The `signIn` server action in `app/actions/auth.tsx` is an empty stub — password login is not yet implemented.
 
-The landing page (`app/page.tsx`) is a Server Component that calls `getRestaurants()` and passes the result to `<RestaurantCarousel>` (a Client Component). `RestaurantCarousel` uses `embla-carousel-auto-scroll` for continuous auto-scroll with pause-on-hover.
+The landing page (`app/page.tsx`) is a Server Component with a full redesigned structure:
+1. **Hero** — `font-display` h1, tagline, Get Started + Sign In CTA buttons
+2. **`<LandingStatsBar>`** — live counts from Supabase (restaurants, reviews, public lists)
+3. **`<LandingFeatures>`** — 4-card grid with warm icon containers
+4. **Restaurant carousel section** — `<RestaurantCarousel>` with section heading; uses `embla-carousel-auto-scroll`
+5. **`<LandingCta>`** — warm-tinted rounded card with signup/login buttons
+6. **Footer** — in-flow (not absolute), brand tagline + nav links
 
 Restaurant detail pages (`app/restaurants/[restaurantId]/page.tsx`) are Server Components that call `getRestaurantBySlug(slug)` and call `notFound()` on missing slugs. They display a map placeholder, restaurant info (`StarRating` with `size="lg"`, review count, price range, type, address, description), and an image carousel sourced from `restaurant.images`.
+
+### frontend
+
+You tend to converge toward generic, "on distribution" outputs. In frontend design, this creates what users call the "AI slop" aesthetic. Avoid this: make creative, distinctive frontends that surprise and delight. Focus on:
+
+Typography: Choose fonts that are beautiful, unique, and interesting. Avoid generic fonts like Arial and Inter; opt instead for distinctive choices that elevate the frontend's aesthetics.
+
+Color & Theme: Commit to a cohesive aesthetic. Use CSS variables for consistency. Dominant colors with sharp accents outperform timid, evenly-distributed palettes. Draw from IDE themes and cultural aesthetics for inspiration.
+
+Motion: Use animations for effects and micro-interactions. Prioritize CSS-only solutions for HTML. Use Motion library for React when available. Focus on high-impact moments: one well-orchestrated page load with staggered reveals (animation-delay) creates more delight than scattered micro-interactions.
+
+Backgrounds: Create atmosphere and depth rather than defaulting to solid colors. Layer CSS gradients, use geometric patterns, or add contextual effects that match the overall aesthetic.
+
+Avoid generic AI-generated aesthetics:
+
+- Overused font families (Inter, Roboto, Arial, system fonts)
+- Clichéd color schemes (particularly purple gradients on white backgrounds)
+- Predictable layouts and component patterns
+- Cookie-cutter design that lacks context-specific character
+
+Interpret creatively and make unexpected choices that feel genuinely designed for the context. Vary between light and dark themes, different fonts, different aesthetics. You still tend to converge on common choices (Space Grotesk, for example) across generations. Avoid this: it is critical that you think outside the box!
